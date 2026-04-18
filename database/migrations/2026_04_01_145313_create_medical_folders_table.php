@@ -4,17 +4,15 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePaymentsTable extends Migration
+class CreateMedicalFoldersTable extends Migration
 {
     public function up()
     {
-        Schema::create('payments', function (Blueprint $table) {
+        Schema::create('medical_folders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('patient_id')->constrained('patients')->onDelete('cascade');
-            $table->foreignId('assistant_id')->nullable()->constrained('users')->onDelete('set null');
-            $table->decimal('amount', 10, 2);
-            $table->date('payment_date');
-            $table->string('payment_method')->default('cash');
+            $table->foreignId('doctor_id')->constrained('users')->onDelete('cascade');
+            $table->date('creation_date');
             $table->text('notes')->nullable();
             $table->timestamps();
         });
@@ -22,6 +20,6 @@ class CreatePaymentsTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('payments');
+        Schema::dropIfExists('medical_folders');
     }
 }
