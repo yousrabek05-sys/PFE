@@ -14,6 +14,10 @@ class MedicalImage extends Model
         'ai_analysis',
     ];
 
+    protected $casts=[
+        'ai_analysis' => 'encrypted',
+    ];
+
     // Image belongs to a medical folder
     public function medicalFolder()
     {

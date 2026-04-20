@@ -15,6 +15,11 @@ class Payment extends Model
         'notes',
     ];
 
+    protected $casts=[
+        'amount' => 'encrypted',
+        'notes' => 'encrypted',
+    ];
+
     // Payment belongs to a patient
     public function patient()
     {

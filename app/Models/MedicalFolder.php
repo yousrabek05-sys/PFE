@@ -13,6 +13,10 @@ class MedicalFolder extends Model
         'notes',
     ];
 
+    protected $casts=[
+        'notes' => 'encrypted',
+    ];
+
     // Folder belongs to a patient
     public function patient()
     {

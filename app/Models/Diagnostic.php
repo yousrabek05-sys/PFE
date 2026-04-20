@@ -12,6 +12,10 @@ class Diagnostic extends Model
         'description',
     ];
 
+    protected $casts = [
+        'description' => 'encrypted',
+    ];
+
     // Diagnostic belongs to a medical folder
     public function medicalFolder()
     {

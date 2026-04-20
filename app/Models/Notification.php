@@ -17,6 +17,11 @@ class Notification extends Model
         'sent_at',
     ];
 
+    protected $casts=[
+        'message' => 'encrypted',
+        'is_read' => 'encrypted',
+    ];
+
     // Notification belongs to a user
     public function user()
     {

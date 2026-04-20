@@ -14,6 +14,10 @@ class Receipt extends Model
         'pdf_path',
     ];
 
+    protected $casts=[
+        'amount' => 'encrypted',
+    ];
+
     // Receipt belongs to a payment
     public function payment()
     {

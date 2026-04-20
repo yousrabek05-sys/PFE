@@ -13,6 +13,10 @@ class TreatmentPlan extends Model
         'duration',
     ];
 
+    protected $casts=[
+        'description' => 'encrypted',
+    ];
+
     // Treatment plan belongs to a medical folder
     public function medicalFolder()
     {
