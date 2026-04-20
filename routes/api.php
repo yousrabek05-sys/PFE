@@ -9,3 +9,4 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::put('/products/{id}/use' [ProductsController::class, 'reduceStock']);
+Route::put('/notifications/read-all', [NotificationController::class, 'markAllAsRead']);
