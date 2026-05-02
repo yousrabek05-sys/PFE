@@ -8,6 +8,7 @@ use App\Models\Patient;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class PaymentController extends Controller
@@ -139,7 +140,7 @@ class PaymentController extends Controller
 
         $filename   = 'receipts/REC-' . $payment->id . '-' . time() . '.pdf';
         $pdfContent = $pdf->output();
-        \Storage::disk('public')->put($filename, $pdfContent);
+        Storage::disk('public')->put($filename, $pdfContent);
 
         $receipt = Receipt::create([
             'payment_id'     => $payment->id,

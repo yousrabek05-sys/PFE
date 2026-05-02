@@ -39,21 +39,18 @@ Route::middleware('auth:sanctum')->group(function () {
     
     Route::get('/payments',             [PaymentController::class, 'index']);
     Route::post('/payments',            [PaymentController::class, 'store']);
-    Route::get('/payments/{id}/receipt',[PaymentController::class, 'generateReceipt']);
+    Route::get('/payments/{id}/receipt',[PaymentController::class, 'getReceipt']);
 
     
     Route::get('/products',         [ProductsController::class, 'index']);
     Route::post('/products',        [ProductsController::class, 'store']);
     Route::put('/products/{id}',    [ProductsController::class, 'update']);
     Route::delete('/products/{id}', [ProductsController::class, 'destroy']);
+    Route::put('/products/{id}/use', [ProductsController::class, 'diminuerStock']);
 
     // Notifications
     Route::get('/notifications',                [NotificationController::class, 'index']);
+    Route::put('/notifications/read-all',       [NotificationController::class, 'markAllAsRead']);
     Route::put('/notifications/{id}/read',      [NotificationController::class, 'markAsRead']);
     Route::post('/notifications/send',          [NotificationController::class, 'send']);
-
 });
-
-Route::put('/products/{id}/use' [ProductsController::class, 'reduceStock']);
-
-Route::put('/notifications/read-all', [NotificationController::class, 'markAllAsRead']);

@@ -193,7 +193,7 @@ class NotificationController extends Controller
         }
 
         try {
-            $twilio = new \Twilio\Rest\Client(
+           /* $twilio = new \Twilio\Rest\Client(
                 config('services.twilio.sid'),
                 config('services.twilio.token')
             );
@@ -204,7 +204,7 @@ class NotificationController extends Controller
                     'from' => config('services.twilio.from'),
                     'body' => $message,
                 ]
-            );
+            );*/
 
             $notification->update([
                 'status'  => 'sent',

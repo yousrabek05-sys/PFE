@@ -220,5 +220,6 @@ class ProductsController extends Controller
         if ($product->quantity <= $product->stock_alert) {
             return 'low';  
         }
+        return 'ok';
     }
 }

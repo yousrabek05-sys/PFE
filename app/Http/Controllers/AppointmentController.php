@@ -7,7 +7,7 @@ use App\Models\Patient;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 
-class RDVController extends Controller
+class AppointmentController extends Controller
 {
     public function index(Request $request)
     {
