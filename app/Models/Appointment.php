@@ -14,6 +14,10 @@ class Appointment extends Model
         'motif',
     ];
 
+    protected $casts = [
+        'date' => 'date:Y-m-d',
+    ];
+
     // Appointment belongs to a patient
     public function patient()
     {

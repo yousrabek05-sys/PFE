@@ -17,7 +17,10 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('phone')->nullable();
             $table->string('password');
-            $table->string('role')->default('user');
+            $table->string('role')->default('patient');
+            $table->string('address')->nullable();
+            $table->date('birth_date')->nullable();
+            $table->text('medical_notes')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

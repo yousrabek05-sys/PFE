@@ -24,15 +24,23 @@ class AppointmentController extends Controller
             }
             
             $appointments = Appointment::where('patient_id', $patient->id)
-                ->with('doctor') // load doctor info
-                ->orderBy('date', 'desc')
-                ->get();
+            ->with('doctor')
+            ->orderBy('date', 'desc')
+            ->get()
+            ->map(function($appt) {
+                $appt->date = \Carbon\Carbon::parse($appt->date)->format('Y-m-d');
+                return $appt;
+            });
 
         } elseif ($user->role === 'doctor') {
-            $appointments = Appointment::where('doctor_id', $user->id)
-                ->with('patient.user') 
-                ->orderBy('date', 'desc')
-                ->get();
+    $appointments = Appointment::where('doctor_id', $user->id)
+        ->with('patient.user')
+        ->orderBy('date', 'desc')
+        ->get()
+        ->map(function($appt) {
+            $appt->date = \Carbon\Carbon::parse($appt->date)->format('Y-m-d');
+            return $appt;
+        });
 
         } else {
             $appointments = Appointment::with(['patient.user', 'doctor'])
@@ -55,35 +63,47 @@ class AppointmentController extends Controller
 
         $user = $request->user();
 
+        if (!in_array($user->role, ['patient', 'doctor', 'assistant'])) {
+    return response()->json([
+        'status'  => 'error',
+        'message' => 'Unauthorized'
+    ], 403);
+}
+
+        // If doctor/assistant is booking, they must provide patient_id
         if ($user->role !== 'patient') {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Only patients can book appointments'
-            ], 403);
+            $request->validate([
+                'patient_id' => 'required|exists:patients,id',
+            ]);
+            $patient = Patient::find($request->patient_id);
+        } else {
+            $patient = Patient::where('user_id', $user->id)->first();
         }
 
-        $patient = Patient::where('user_id', $user->id)->first();
-
         
-        $slotTaken = Appointment::where('date', $request->date)
-            ->whereIn('status', ['pending', 'confirmed'])
-            ->exists(); 
+        $doctorId = $this->getDoctorId();
 
-            
+        $slotTaken = Appointment::where('date', $request->date)
+            ->where('doctor_id', $doctorId)
+            ->whereIn('status', ['pending', 'confirmed'])
+            ->exists();
+
         if ($slotTaken) {
             return response()->json([
                 'status'  => 'error',
-                'message' => 'Slot not available' 
+                'message' => 'Slot not available'
             ], 409);
         }
 
         $appointment = Appointment::create([
             'patient_id' => $patient->id,
-            'doctor_id'  => $this->getDoctorId(), 
+            'doctor_id'  => $doctorId,
             'date'       => $request->date,
             'motif'      => $request->motif,
-            'status'     => 'pending', // always starts as pending
+            'status'     => 'pending',
         ]);
+
+        $appointment->load('doctor');
 
         $this->sendNotification(
             $patient->user_id,
@@ -266,7 +286,7 @@ class AppointmentController extends Controller
             'user_id' => $userId,
             'message' => $message,
             'type'    => $type,
-            'date'    => now(),
+            'date'    => now()->toDateTimeString(),
             'is_read' => false,
             'channel' => 'in_app', 
             'status'  => 'sent',

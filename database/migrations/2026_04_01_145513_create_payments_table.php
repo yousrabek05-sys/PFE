@@ -12,7 +12,7 @@ class CreatePaymentsTable extends Migration
             $table->id();
             $table->foreignId('patient_id')->constrained('patients')->onDelete('cascade');
             $table->foreignId('assistant_id')->nullable()->constrained('users')->onDelete('set null');
-            $table->decimal('amount', 10, 2);
+            $table->text('amount');
             $table->date('payment_date');
             $table->string('payment_method')->default('cash');
             $table->text('notes')->nullable();

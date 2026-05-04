@@ -255,50 +255,44 @@ class FolderController extends Controller
 
     // 🖼️ ADD IMAGE
     public function addImage(Request $request, $id)
-    {
-        $request->validate([
-            // 'file' must be an image, max 5MB
-            'file' => 'required|image|max:5120',
-            'type' => 'required|in:xray,intraoral,other',
-        ]);
+{
+    $request->validate([
+        'type' => 'required|in:xray,intraoral,other',
+        'path' => 'required|string',
+    ]);
 
-        $user = $request->user();
+    $user = $request->user();
 
-        if ($user->role !== 'doctor') {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Only doctors can add images'
-            ], 403);
-        }
-
-        $folder = MedicalFolder::find($id);
-
-        if (!$folder) {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Folder not found'
-            ], 404);
-        }
-
-        $path = $request->file('file')->store(
-            'medical-images', 
-            'public'         
-        );
-
-        $image = MedicalImage::create([
-            'medical_folder_id' => $id,
-            'type'              => $request->type,
-            'path'              => $path,
-            'description'       => $request->description ?? null,
-            'ai_analysis'       => null, 
-        ]);
-
+    if ($user->role !== 'doctor') {
         return response()->json([
-            'status'  => 'success',
-            'message' => 'Image added successfully',
-            'data'    => $image
-        ], 201);
+            'status'  => 'error',
+            'message' => 'Only doctors can add images'
+        ], 403);
     }
+
+    $folder = MedicalFolder::find($id);
+
+    if (!$folder) {
+        return response()->json([
+            'status'  => 'error',
+            'message' => 'Folder not found'
+        ], 404);
+    }
+
+    $image = MedicalImage::create([
+        'medical_folder_id' => $id,
+        'type'              => $request->type,
+        'path'              => $request->path,
+        'description'       => $request->description ?? null,
+        'ai_analysis'       => null,
+    ]);
+
+    return response()->json([
+        'status'  => 'success',
+        'message' => 'Image added successfully',
+        'data'    => $image
+    ], 201);
+}
 
     private function sendNotification($userId, $message, $type)
     {

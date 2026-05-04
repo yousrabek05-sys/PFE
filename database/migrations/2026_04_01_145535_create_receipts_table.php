@@ -13,7 +13,7 @@ class CreateReceiptsTable extends Migration
             $table->foreignId('payment_id')->constrained()->onDelete('cascade');
             $table->string('receipt_number')->unique();
             $table->date('issue_date');
-            $table->decimal('amount', 10, 2);
+            $table->text('amount');
             $table->string('pdf_path')->nullable();
             $table->timestamps();
         });

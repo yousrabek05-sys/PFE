@@ -13,7 +13,7 @@ class CreateAppointmentsTable extends Migration
             $table->foreignId('patient_id')->constrained('patients')->onDelete('cascade');
             $table->foreignId('doctor_id')->nullable()->constrained('users')->onDelete('set null');
             $table->date('date');
-            $table->enum('status', ['pending', 'accepted', 'refused', 'cancelled', 'completed'])->default('pending');
+            $table->enum('status', ['pending', 'confirmed', 'refused', 'cancelled', 'completed'])->default('pending');
             $table->string('motif')->nullable();
             $table->timestamps();
         });

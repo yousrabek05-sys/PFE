@@ -19,7 +19,7 @@ class Notification extends Model
 
     protected $casts=[
         'message' => 'encrypted',
-        'is_read' => 'encrypted',
+        'is_read' => 'boolean',
     ];
 
     // Notification belongs to a user

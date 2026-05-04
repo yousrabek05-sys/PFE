@@ -12,7 +12,7 @@ class AdminSeeder extends Seeder
     {
         // Create Doctor account
         User::create([
-            'name'     => 'Dr. Mohamed',
+            'name'     => 'Dr. Yamine LAIB',
             'email'    => 'doctor@clinic.com',
             'password' => Hash::make('doctor123'),
             'phone'    => '0555000001',

@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\RDVController;
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\FolderController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductsController;
@@ -19,13 +19,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout',          [AuthController::class, 'logout']);
     Route::get('/profile',          [AuthController::class, 'profile']);
     Route::put('/profile',          [AuthController::class, 'updateProfile']);
-
+    Route::delete('/profile',       [AuthController::class, 'deleteAccount']);
     
-    Route::get('/appointments',             [RDVController::class, 'index']);
-    Route::post('/appointments',            [RDVController::class, 'store']);
-    Route::put('/appointments/{id}',        [RDVController::class, 'update']);
-    Route::delete('/appointments/{id}',     [RDVController::class, 'cancel']);
-    Route::put('/appointments/{id}/status', [RDVController::class, 'updateStatus']);
+    Route::get('/patients',                 [AuthController::class, 'allPatients']);
+    Route::get('/appointments',             [AppointmentController::class, 'index']);
+    Route::post('/appointments',            [AppointmentController::class, 'store']);
+    Route::put('/appointments/{id}',        [AppointmentController::class, 'update']);
+    Route::delete('/appointments/{id}',     [AppointmentController::class, 'cancel']);
+    Route::put('/appointments/{id}/status', [AppointmentController::class, 'updateStatus']);
 
     
     Route::get('/folders',                      [FolderController::class, 'index']);
